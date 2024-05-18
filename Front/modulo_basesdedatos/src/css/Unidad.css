@@ -1,0 +1,32 @@
+.center-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 10rem;
+    height: 100vh;
+  }
+  .center-card2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 45rem;
+    height: 100vh;
+  }
+.center-div{
+  display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    font-size: 20px;
+    padding-right:50px;
+}
+.table-div{
+  display:table;
+
+}
+.table-row{
+  display:table-cell;
+  
+}
