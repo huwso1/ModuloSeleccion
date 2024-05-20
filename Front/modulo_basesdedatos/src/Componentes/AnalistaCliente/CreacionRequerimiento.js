@@ -22,6 +22,7 @@ function CreacionRequerimiento(){
      e.preventDefault();
      //Esta peticion envia los datos del requerimiento, incluyendo el codigo del analista cliente
      // que lo solicito y el analista general al que se le asignara el requerimiento.
+     //Se debe hacer la insercion en proceso requerimiento para la fase 1 del requerimiento
      try {
        const response = await axios.post("/banana", {
 
@@ -73,15 +74,15 @@ function CreacionRequerimiento(){
    //Esta peticion actualizara la lista de analistas generales al cargar la pagina
    var peticion = () => {
     return new Promise((resolve, reject) => {
-        setMessage("");
-        Axios.post('/Analistas generales', {"idusuario":window.sessionStorage.getItem("idusuario") })
+        SetMessage("");
+        axios.post('/Analistas generales', {"idusuario":window.sessionStorage.getItem("idusuario") })
             .then((response) => {
                 // Resolvemos la promesa con los datos recibidos
                 resolve(response.data);
             })
             .catch((error) => {
                 // Rechazamos la promesa con el mensaje de error
-                setMessage(error.response.data.errors);
+                SetMessage(error.response.data.errors);
             });
     });
 };

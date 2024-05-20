@@ -9,6 +9,7 @@ import NavigateBar from './Componentes/NavigateBar.js';
 import NavigateBarAG from './Componentes/NavigateBarAG.js';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Registro from './Componentes/Registro.js';
+import ConsultaRequerimiento from './Componentes/AnalistaGeneral/ConsultaRequerimiento.js';
 
 function App() {
   return (
@@ -23,7 +24,7 @@ function App() {
      </Route>
 
     <Route path="/NavigateBarAG" element={<NavigateBarAG/>}>
-        <Route index element={<></>} />
+        <Route index element={<ConsultaRequerimiento/>} />
         <Route  path="VerREQ" element ={<></>}/>
         
     </Route>
