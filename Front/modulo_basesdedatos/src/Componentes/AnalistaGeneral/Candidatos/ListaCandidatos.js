@@ -8,14 +8,18 @@ import Form from 'react-bootstrap/Form';
 import '../../../css/Unidad.css';
 import Popup from '../Popup.js';
 import Candidato from './Candidato.js';
+import {useNavigate} from 'react-router-dom';
+import axios from 'axios';
 
-function ListaCandidatos({Candidatos,phase}){
+function ListaCandidatos({Candidatos,phase,idrequerimiento}){
     const [popupfase,setPopup]=useState(false);
+    const [PopupInvitacion,setPopupI]=useState(false);
     const [usuario,setusuario]=useState();
     const [fase,setfase]=useState(phase);
     const [candidatosseleccionados,Setcandidatos]=useState([]);
     const [debug,Setdebug]=useState();
-
+    
+    
     const handlerRequerimiento=(usuario)=>{
         setPopup(true);
         setfase(phase);
@@ -43,11 +47,77 @@ function ListaCandidatos({Candidatos,phase}){
             return <Popup codigo={usuario} fase={fase} onClose={()=>{setPopup(false)}}/>;
         }
     }
+    function PopupInvitar(){
+        if(PopupInvitacion){
+            return <Popup codigo={candidatosseleccionados} fase={"invitacion"} utilitary={idrequerimiento} onClose={()=>{setPopupI(false)}}/>;
+        }
+    }
+    function preseleccioneinvitacion(){
+        if(phase==3){
+            return(<div>
+                <Card style={{alignItems:"center",backgroundColor:"#5DE2E7",cursor:"pointer"}} onClick={()=>{ setPopupI(true)}} >
+                    <CardBody >
+                        Redactar invitacion
+                    </CardBody>
+                </Card>
+            </div>);
+        }
+        if(phase==4){
+            return(<div>
+                <Card style={{alignItems:"center",backgroundColor:"#5DE2E7",cursor:"pointer"}} onClick={()=>{Preseleccionar()}} >
+                    <CardBody >
+                        Preseleccionar candidatos seleccionados
+                    </CardBody>
+                </Card>
+            </div>);
+        }
+    }
+    function Invitationfield(){
+        if(phase<6){
+            return (<Card style={{backgroundColor:'#129EF2',alignItems:'center'}}>
+            <CardBody >
+                <p>¿Invitar?</p>
+            </CardBody>
+        </Card>)
+        }
+    }
+    function Preseleccionar()  {
+        
+        //Esta peticion envia la lista de candidatos a los que se les ha seleccionado en el proceso de preseleccion
+        // ademas, envia el id del requerimiento asociado a la convocatoria 
+        //Recordar que al resolverse esta peticion tambien debe crearse un nuevo registro en proceso requerimiento, con la nueva fase en este caso seria la Fase 6
+        if(candidatosseleccionados.length==0){
+            Setdebug(" hace falta seleccionar al menos un candidato");
+            return;
+        }
+        try {
+           axios.post("/Preseleccion", {
+   
+              
+              "listacandidatos":candidatosseleccionados ,
+              "idusuario":window.sessionStorage.getItem("idusuario"),
+              "idRequerimiento":idrequerimiento
+              
+              
+          }).then((response)=>{
+            useNavigate("NavigateBarAG")
+            Setdebug(response.data.respuesta);
+          }).catch((error)=>{
+            console.log(error);
+          })
+          
+        } catch (error) {
+          console.log(error);
+        }
+      };
     
     
     return(
         <div>
-            
+            <div>
+                {preseleccioneinvitacion()}
+                
+            </div>
              <CardGroup>
              
             <Card style={{backgroundColor:'#129EF2',alignItems:'center'}} >
@@ -71,11 +141,7 @@ function ListaCandidatos({Candidatos,phase}){
                     <p>Numero de Documento</p>
                 </CardBody>
             </Card>
-            <Card style={{backgroundColor:'#129EF2',alignItems:'center'}}>
-                <CardBody >
-                    <p>¿Invitar?</p>
-                </CardBody>
-            </Card>
+            {Invitationfield()}
             
         </CardGroup>
         
@@ -83,10 +149,11 @@ function ListaCandidatos({Candidatos,phase}){
         { Candidatos?.map((Candidatox,index)=>{
             //Cambiar la comparacion por el id de la unidad en lugar del nombre
             
-            return <Candidato key={index} Candidato={Candidatox} handlerinvitacion={handleinvitacion} handler={handlerRequerimiento}/>;
+            return <Candidato key={index} Candidato={Candidatox} handlerinvitacion={handleinvitacion} handler={handlerRequerimiento} fase={phase}/>;
         })}
         {PopupPhase()}
-        <p>{candidatosseleccionados}</p>
+        {PopupInvitar()}
+        <p>{debug}</p>
         </div>
     )
     }

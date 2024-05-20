@@ -21,9 +21,13 @@ function ListaRequerimientos({Requerimientos,handler}){
         ;
         setcodigo(codigo);
         setfase(fase);
-        handlerphase4(codigo,fase);
-        if(fase<3){
+        
+        if(fase<3 || fase==5){
         setPopup(true);
+        }else{
+            if(fase<7){
+            handlerphase4(codigo,fase);
+            }
         }
     }
     function PopupPhase(){

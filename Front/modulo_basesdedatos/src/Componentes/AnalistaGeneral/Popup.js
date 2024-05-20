@@ -3,14 +3,27 @@ import "../../css/Popup.css";
 import Form from 'react-bootstrap/Form';
 import PreConvocatoria from './Formularios/PreConvocatoria.js';
 import Convocatoria from './Formularios/Convocatoria.js';
-function Popup({ codigo,fase,onClose }) {
+import Hojadevida from './Formularios/Hojadevida.js';
+import Invitacion from './Formularios/invitacion.js';
+import Asignaciondepruebas  from './Formularios/Asignaciondepruebas.js';
+function Popup({ codigo,fase,onClose,utilitary }) {
 
     function formulariodefase(){
+        console.log(fase);
         if(fase==1){
             return( <PreConvocatoria idRequerimiento={codigo} />)
         }
         if(fase==2){
             return( <Convocatoria idRequerimiento={codigo} />)
+        }
+        if(fase==3){
+            return( <Hojadevida usuario={codigo} />)
+        }
+        if(fase==="invitacion"){
+            return( <Invitacion listacandidatos={codigo} idRequerimiento={utilitary}  />)
+        }
+        if(fase===5){
+            return( <Asignaciondepruebas listacandidatos={codigo} idRequerimiento={utilitary}  />)
         }
     }
   return (

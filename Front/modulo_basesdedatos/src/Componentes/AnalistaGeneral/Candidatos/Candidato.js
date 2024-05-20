@@ -6,7 +6,7 @@ import CardGroup from 'react-bootstrap/CardGroup';
 import '../../../css/Unidad.css';
 import Form from 'react-bootstrap/Form';
 
-function Candidato({Candidato,handler,handlerinvitacion}){
+function Candidato({Candidato,handler,handlerinvitacion,fase}){
     
 const [debug,setdebug]=useState();
 const handlerCandidato=()=>{
@@ -17,7 +17,17 @@ const handlerInvitacion=(ischecked)=>{
 }
 
 
-
+function Invitationfield(){
+    if(fase<6){
+        return (<Card>
+            <CardBody>
+            <Form.Check as='input' type='checkbox' onClick={(element)=>{
+               handlerInvitacion(element.target.checked);
+            }}/>
+            </CardBody>
+        </Card>)
+    }
+}
 
 return(
     
@@ -43,13 +53,7 @@ return(
             <p>{Candidato.nDoc}</p>
             </CardBody>
         </Card>
-        <Card>
-            <CardBody>
-            <Form.Check as='input' type='checkbox' onClick={(element)=>{
-               handlerInvitacion(element.target.checked);
-            }}/>
-            </CardBody>
-        </Card>
+        {Invitationfield()}
     </CardGroup>
     
     
