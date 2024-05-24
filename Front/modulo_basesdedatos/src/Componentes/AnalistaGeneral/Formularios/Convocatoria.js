@@ -15,7 +15,7 @@ function Convocatoria({idRequerimiento}){
         e.preventDefault();
         //Esta peticion envia los datos del requerimiento, incluyendo el codigo del analista cliente
         // que lo solicito y el analista general al que se le asignara el requerimiento.
-        //Recordar que al resolverse esta peticion tambien debe crearse un nuevo registro en proceso requerimiento, con la nueva fase
+        //Recordar que al resolverse esta peticion tambien debe crearse un nuevo registro en proceso requerimiento, con la nueva fase en este caso seria la Fase 4
         if(Convocatoria=="" || Convocatoria==null){
             SetMessage("Debe llenar los campos antes de continuar");
             return;

@@ -9,21 +9,15 @@ import Popup from './Popup.js';
 function Requerimiento({Requerimiento,handler}){
     
 const [debug,setdebug]=useState();
-const [popupfase,setPopup]=useState(false);
+
 const handlerRequerimiento=()=>{
     handler(Requerimiento.codigo,Requerimiento.fase);
 }
 
-function PopupPhase(){
-    if(popupfase){
-        return <Popup/>;
-    }
-}
 
 return(
     
     <CardGroup>
-        {PopupPhase()}
         <Card onClick={()=>{handlerRequerimiento()}} style={{cursor:"pointer"}}>
             <CardBody>
                 <p>{Requerimiento.codigo}</p>

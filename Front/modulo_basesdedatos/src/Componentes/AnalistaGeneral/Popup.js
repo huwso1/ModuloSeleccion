@@ -23,7 +23,7 @@ function Popup({ codigo,fase,onClose,utilitary }) {
             return( <Invitacion listacandidatos={codigo} idRequerimiento={utilitary}  />)
         }
         if(fase===5){
-            return( <Asignaciondepruebas listacandidatos={codigo} idRequerimiento={utilitary}  />)
+            return( <Asignaciondepruebas  idRequerimiento={utilitary}  />)
         }
     }
   return (
