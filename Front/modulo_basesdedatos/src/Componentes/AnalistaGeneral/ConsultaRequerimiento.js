@@ -18,21 +18,52 @@ const [isSelect,setSelect]=useState(false);
 const [Candidatos,setCandidatos]=useState([]);
 const [message,Setmessage]=useState("");
 const navigate=useNavigate();
-var idr;
-var phase;
+const [idr,SetIdr]=useState();
+const [phase,setPhase]=useState();
 
 const handlerFase4=(idrequerimiento,fase)=>{
-    idr=idrequerimiento;
-    phase=fase;
-    const fetchCandidatos=async()=>{
+    SetIdr(idrequerimiento);
+    setPhase(fase);
+    var fetchCandidatos=()=>{};
+    if(fase==3){
+    fetchCandidatos=async()=>{
         try{
             const data=await peticionCandidatos();
             setCandidatos(data);
+            setSelect(true);
         }catch(error){
             setSelect(true);
         }
         
     }
+    }
+    if(fase==4){
+        fetchCandidatos=async()=>{
+            try{
+                const data=await peticionCandidatosqueaceptaron();
+                setCandidatos(data);
+                setSelect(true);
+            }catch(error){
+                setSelect(true);
+            }
+            
+        }
+    }
+    if(fase==6){
+        fetchCandidatos=async()=>{
+            try{
+                const data=await peticionCandidatosquetienen40enpruebas();
+                setCandidatos(data);
+                setSelect(true);
+            }catch(error){
+                setSelect(true);
+            }
+            
+        }
+    }
+    
+    
+    
     fetchCandidatos();
     
     
@@ -55,7 +86,7 @@ useEffect(() => {
             //Se setea la lista con una lista ejemplo, la idea es que el back envie una lista json con objetos analista general
             // que tendran como atributos, nombre y id
             
-            setRequerimientos([new Requerimientomap('1','Garcia Berry','19-05-2024',null,5),new Requerimientomap('2','Martha Berry','19-05-2024',null,2)]);
+            
             console.error('Error al obtener los datos:', error);
         }
         
@@ -74,7 +105,10 @@ useEffect(() => {
             })
             .catch((error) => {
                 // Rechazamos la promesa con el mensaje de error
-                setRequerimientos([new Requerimientomap('1','Garcia Berry','19-05-2024',null,3),new Requerimientomap('2','Martha Berry','19-05-2024',null,2)]);
+                setRequerimientos([new Requerimientomap('1','Garcia Berry','19-05-2024',null,1),new Requerimientomap('2','Martha Berry','19-05-2024',null,2),
+            new Requerimientomap('3','Martha Berry','19-05-2024',null,3),new Requerimientomap('4','Martha Berry','19-05-2024',null,4),new Requerimientomap('5','Martha Berry','19-05-2024',null,5),
+            new Requerimientomap('6','Martha Berry','19-05-2024',null,6),new Requerimientomap('7','Martha Berry','19-05-2024',null,7),new Requerimientomap('8','Martha Berry','19-05-2024',null,8)
+            ]);
                 Setmessage(error.response.data.errors);
             });
     });
@@ -97,6 +131,40 @@ useEffect(() => {
                 });
         });
     };
+    var peticionCandidatosqueaceptaron= () => {
+        return new Promise((resolve, reject) => {
+            
+            Axios.post('/Candidatosqueaceptaron', {"idusuario":window.sessionStorage.getItem("idusuario"),"idRequerimiento":idr})
+                .then((response) => {
+                    // Resolvemos la promesa con los datos recibidos, es decir los candidatos que aceptaron la convocatoria o la invitacion a la convocatoria
+                    resolve(response.data);
+                    
+                })
+                .catch((error) => {
+                    // Rechazamos la promesa con el mensaje de error
+                    setCandidatos([new Candidato("huwso","Juan","Gomez","2015-05-02","194546321","CC")]); 
+                    Setmessage(error.response.data.errors);
+                    reject(error);
+                });
+        });
+    };
+    var peticionCandidatosquetienen40enpruebas= () => {
+        return new Promise((resolve, reject) => {
+            
+            Axios.post('/Candidatosqueaceptaron', {"idusuario":window.sessionStorage.getItem("idusuario"),"idRequerimiento":idr})
+                .then((response) => {
+                    // Resolvemos la promesa con los datos recibidos, es decir los candidatos que sacaron mas de 40% en las pruebas asignadas para el perfil
+                    resolve(response.data);
+                    
+                })
+                .catch((error) => {
+                    // Rechazamos la promesa con el mensaje de error
+                    setCandidatos([new Candidato("huwso","Juan","Gomez","2015-05-02","194546321","CC")]); 
+                    Setmessage(error.response.data.errors);
+                    reject(error);
+                });
+        });
+    };
 
 if(isSelect){
 return(
@@ -107,7 +175,7 @@ return(
 
 </Card>
 <Card style={{width:'80%'}}>
-    <ListaCandidatos Candidatos={Candidatos} />   
+    <ListaCandidatos Candidatos={Candidatos} phase={phase} />   
     <p>Debug: {message}</p>
 </Card>
 
@@ -120,7 +188,7 @@ return(
  
  </Card>
  <Card style={{width:'80%'}}>
-     <ListaRequerimientos Requerimientos={Requerimientos} handler={handlerFase4} />   
+     <ListaRequerimientos Requerimientos={Requerimientos} handler={handlerFase4} idrequerimiento={idr} />   
      <p>Debug: {message}</p>
  </Card>
  

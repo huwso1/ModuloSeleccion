@@ -1,10 +1,10 @@
 Todos:
--Registro de empleados
+-Registro de empleados DONE
 	Cargos: Analista cliente
 	Analista general.
--Login
-Analista cliente:
- -Vista con creacion de requerimiento que incluya el
+-Login DONE
+Analista cliente: 
+ -Vista con creacion de requerimiento que incluya el DONE
 	codigo empleado que se registro en responsable
 	FechReque con hora y fecha del sistema,
 	en desFuncion incluir las funciones que tendria el cargo
@@ -12,30 +12,30 @@ Analista cliente:
  	y el numero de vacantes disponibles.
 	
 	En esa misma vista incluir una lista con los analistas generales registrados, para notificarles
-	de que tienen un nuevo requerimiento por un correo.
+	de que tienen un nuevo requerimiento por un correo. DONE
 Analista general:
--La vista debe mostrar(nav bar) en la parte superior, su nombre, la fecha de hoy
+-La vista debe mostrar(nav bar) en la parte superior, su nombre, la fecha de hoy DONE
 	y un acceso a la lista con los requerimientos que le corresponden.
 
 -Vista para visualizar sus requerimientos asignados.
-	Se debe mostrar la fase,codigo del requerimiento, responsable y fecha.
+	Se debe mostrar la fase,codigo del requerimiento, responsable y fecha. DONE
 	dependiendo de la fase, al clickear sobre el requerimiento deben aparecer diferentes vistas.
-	Si la fase es 1: 
+	Si la fase es 2: 
 	-Al tocar el requerimiento debe desplegar un editor, con los siguientes campos
-	descripcion del requerimiento, perfil(Lista desplegable), disciplina(lista desplegable),numero de vacantes, etc.
+	descripcion del requerimiento, perfil(Lista desplegable), disciplina(lista desplegable),numero de vacantes, etc. DONE
 	y pasaria a la fase 3.
-	-Vista por cada requerimiento que muestre el titulo del requerimiento,las fases diligenciadas y las que faltan, debe aparecer inactiva la que sigue en orden.
+	-Vista por cada requerimiento que muestre el titulo del requerimiento,las fases diligenciadas y las que faltan, debe aparecer inactiva la que sigue en orden. //Baja prioridad
 	-en fase 3, al clickear sobre el requerimiento le debe aparecer un editor para redactar la convocatoria, guardar la convocatoria y actualizar el elemento grafico.
 	Si la fase es 4:
 	-Al clickear el requerimiento, debe aparecer una lista con los candidatos existentes, y al clickear cada candidato debe aparecer la hoja de vida, con los elementos de TipoItem y debe seleccionarse de algun modo para añadirse a una lista.
 	-debe aparecer un boton para poder abrir un editor para redactar la invitacion y enviarla a los candidatos seleccionados
-	Si la fase es 5: Al tocar el requerimiento aparece la lista de candidatos que aceptaron la invitacion y los que aceptaron la convocatoria.
+	Si la fase es 5: Al tocar el requerimiento aparece la lista de candidatos que aceptaron la invitacion y los que aceptaron la convocatoria. DONE
 	Al tocar el candidato, de nuevo se despliega la hoja de vida.
 	y deben poderse seleccionar los candidatos de la misma manera que en la fase 4.
 	debe haber un boton que preseleccione a los candidatos seleccionados.
-	Si la fase es 6: 
+	Si la fase es 6: DONE
 	-Al tocar el requerimiento aparece una interfaz para asignar pruebas para el perfil del requerimiento, se puede seleccionar una prueba y la fecha de presentacion.
-	Si la fase es 7: al tocar el requerimiento aparece un listado con los candidatos que obtuvieron el 40% de las respuestas bien.
+	Si la fase es 7: al tocar el requerimiento aparece un listado con los candidatos que obtuvieron el 40% de las respuestas bien. DONE
 	
 	
 	
