@@ -4,6 +4,7 @@ import employeeRoutes from './routes/employeeRoutes.js';
 import requirementRoutes from './routes/requirementRoutes.js';
 import disciplineRoutes from './routes/disciplineRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
+import candidateRoutes from './routes/candidateRoutes.js'
 
 const app = express();
 
@@ -12,6 +13,7 @@ app.use('/empleados', employeeRoutes);
 app.use('/requerimientos', requirementRoutes);
 app.use('/disciplinas', disciplineRoutes);
 app.use('/perfiles', profileRoutes);
+app.use('/candidatos', candidateRoutes);
 
 const PORT = process.env.PORT || 3003;
 
