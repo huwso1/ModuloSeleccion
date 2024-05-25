@@ -6,10 +6,16 @@ import disciplineRoutes from './routes/disciplineRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import candidateRoutes from './routes/candidateRoutes.js'
 import testRoutes from './routes/testRoutes.js';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
+
+// Configuración de CORS
+app.use(cors());
+
+// Rutas
 app.use('/empleados', employeeRoutes);
 app.use('/requerimientos', requirementRoutes);
 app.use('/disciplinas', disciplineRoutes);
