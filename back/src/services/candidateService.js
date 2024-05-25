@@ -22,7 +22,15 @@ async function getAllCandidatesByDiscipline(idRequerimiento) {
 
     const result = await connection.execute(query, { idRequerimiento });
 
-    return result.rows;
+    const candidates = result.rows.map(row => {
+      let candidate = {};
+      result.metaData.forEach((meta, idx) => {
+        candidate[meta.name.toLowerCase()] = row[idx];
+      });
+      return candidate;
+    });
+
+    return candidates;
   } catch (error) {
     console.error('Error getting candidates by discipline:', error);
     throw error;
@@ -37,6 +45,46 @@ async function getAllCandidatesByDiscipline(idRequerimiento) {
   }
 }
 
+async function getCandidatesFifthPhase(idRequerimiento) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection();
+
+    const getCandidatesQuery = `
+      SELECT C.*
+      FROM candidato C
+      WHERE C.usuario IN (
+        SELECT usuario
+        FROM ProcesoCandidato PC
+        WHERE consProceso = 4 AND consecReque = :idRequerimiento
+      )
+    `;
+    const result = await connection.execute(getCandidatesQuery, { idRequerimiento });
+
+    const candidates = result.rows.map(row => {
+      let candidate = {};
+      result.metaData.forEach((meta, idx) => {
+        candidate[meta.name.toLowerCase()] = row[idx];
+      });
+      return candidate;
+    });
+    
+    return candidates;
+  } catch (error) {
+    console.error('Error obteniendo candidatos para la quinta fase:', error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.error('Error cerrando la conexión:', error);
+      }
+    }
+  }
+}
+
 export {
-  getAllCandidatesByDiscipline
+  getAllCandidatesByDiscipline,
+  getCandidatesFifthPhase,
 };
