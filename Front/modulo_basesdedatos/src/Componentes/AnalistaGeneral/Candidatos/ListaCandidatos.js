@@ -91,7 +91,7 @@ function ListaCandidatos({Candidatos,phase,idrequerimiento}){
             return;
         }
         try {
-           axios.post("/Preseleccion", {
+           axios.post("http://localhost:3003/requerimientos/fase5", {
    
               
               "listacandidatos":candidatosseleccionados ,
@@ -101,6 +101,7 @@ function ListaCandidatos({Candidatos,phase,idrequerimiento}){
               
           }).then((response)=>{
             useNavigate("NavigateBarAG")
+            window.location.reload();
             Setdebug(response.data.respuesta);
           }).catch((error)=>{
             console.log(error);

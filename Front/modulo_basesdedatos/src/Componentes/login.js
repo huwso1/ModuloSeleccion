@@ -21,7 +21,7 @@ function Login() {
                 navigate('/NavigateBarAG');
             }
         }).catch((response)=>{
-            window.sessionStorage.setItem("idusuario",2);
+            window.sessionStorage.setItem("idusuario","00004");
             window.sessionStorage.setItem("Datos","Juan Alberto Parra");
             window.sessionStorage.setItem("rol","2");
             navigate('/NavigateBarAG');

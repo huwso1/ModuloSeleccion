@@ -6,6 +6,7 @@ import {
 export const getAllCandidatesByDisciplineController = async (req, res) => {
   try {
     const { idRequerimiento } = req.params;
+    console.error(idRequerimiento);
 
     const candidates = await getAllCandidatesByDiscipline(idRequerimiento);
 

@@ -21,7 +21,7 @@ function Convocatoria({idRequerimiento}){
             return;
         }
         try {
-          const response = await axios.post("/DetallesRequerimiento", {
+          const response = await axios.post("http://localhost:3003/requerimientos/fase3", {
    
               
               "Convocatoria": Convocatoria,
@@ -29,7 +29,7 @@ function Convocatoria({idRequerimiento}){
               "idRequerimiento":idRequerimiento
               
           }).then((response)=>{
-            useNavigate("NavigateBarAG")
+            window.location.reload();
             SetMessage(response.data.respuesta);
           })
           

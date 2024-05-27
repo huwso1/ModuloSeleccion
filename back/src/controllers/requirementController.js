@@ -27,9 +27,10 @@ export const createRequirementController = async (req, res) => {
 export const getRequirementsByGeneralAnalystIdController = async (req, res) => {
   try {
     const { id } = req.params;
-
+    console.error(id);
     // Verificar si el ID está presente
     if (!id) {
+      
       return res.status(400).json({ error: 'El ID (CODIGO )del analista es obligatorio' });
     }
 

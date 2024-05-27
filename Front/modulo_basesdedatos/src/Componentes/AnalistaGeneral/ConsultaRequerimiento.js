@@ -28,8 +28,12 @@ const handlerFase4=(idrequerimiento,fase)=>{
     if(fase==3){
     fetchCandidatos=async()=>{
         try{
-            const data=await peticionCandidatos();
-            setCandidatos(data);
+            const data=await peticionCandidatos(idrequerimiento);
+           var  listacandidatos=[];
+            data.map((candidato)=>{
+                listacandidatos.push(new Candidato(candidato.usuario,candidato.nombre,candidato.apellido,candidato.fechanac,candidato.ndoc,candidato.idtipodoc));
+            })
+            setCandidatos(listacandidatos);
             setSelect(true);
         }catch(error){
             setSelect(true);
@@ -40,8 +44,13 @@ const handlerFase4=(idrequerimiento,fase)=>{
     if(fase==4){
         fetchCandidatos=async()=>{
             try{
-                const data=await peticionCandidatosqueaceptaron();
-                setCandidatos(data);
+                const data=await peticionCandidatosqueaceptaron(idrequerimiento);
+                var  listacandidatos=[];
+            data.map((candidato)=>{
+                listacandidatos.push(new Candidato(candidato.usuario,candidato.nombre,candidato.apellido,candidato.fechanac,candidato.ndoc,candidato.idtipodoc));
+            })
+            setCandidatos(listacandidatos);
+                
                 setSelect(true);
             }catch(error){
                 setSelect(true);
@@ -78,7 +87,13 @@ useEffect(() => {
             const data = await peticion();
             // Una vez que la promesa se resuelve, actualizamos el estado con los datos recibidos
             //Tal vez sea necesario crear una funcion para pasar los datos a objetos Requerimientomap
-            setRequerimientos(data);
+            var listareq=[];
+            data.map((requerimiento)=>{
+                listareq.push(new Requerimientomap(requerimiento.CONSECREQUE,requerimiento.CODEMPLEADO1,requerimiento.FECHAREQUE,
+                    null,requerimiento.FASE
+                ))
+            })
+            setRequerimientos(listareq);
 
             console.log(data); // Aquí puedes ver los datos en la consola
         } catch (error) {
@@ -98,7 +113,7 @@ useEffect(() => {
    var peticion = () => {
     return new Promise((resolve, reject) => {
         Setmessage("");
-        Axios.post('/Requerimientos', {"idusuario":window.sessionStorage.getItem("idusuario") })
+        Axios.get('http://localhost:3003/requerimientos/analista-general/'+window.sessionStorage.getItem("idusuario")+'',  )
             .then((response) => {
                 // Resolvemos la promesa con los datos recibidos, es decir los requerimientos asignados a ese analista general, identificado por idusuario
                 resolve(response.data);
@@ -115,10 +130,10 @@ useEffect(() => {
 };
 
     //Esta peticion actualizara la lista de candidatos registrados en el aplicativo
-    var peticionCandidatos= () => {
+    var peticionCandidatos= (idrequerimiento) => {
         return new Promise((resolve, reject) => {
             
-            Axios.post('/Candidatos', {"idusuario":window.sessionStorage.getItem("idusuario") })
+            Axios.get('http://localhost:3003/candidatos/disciplina/'+idrequerimiento, {})
                 .then((response) => {
                     // Resolvemos la promesa con los datos recibidos, es decir los candidatos con la disciplina que pide el requerimiento
                     resolve(response.data);
@@ -131,10 +146,10 @@ useEffect(() => {
                 });
         });
     };
-    var peticionCandidatosqueaceptaron= () => {
+    var peticionCandidatosqueaceptaron= (idrequerimiento) => {
         return new Promise((resolve, reject) => {
             
-            Axios.post('/Candidatosqueaceptaron', {"idusuario":window.sessionStorage.getItem("idusuario"),"idRequerimiento":idr})
+            Axios.get('http://localhost:3003/candidatos/fase5/'+idrequerimiento, {})
                 .then((response) => {
                     // Resolvemos la promesa con los datos recibidos, es decir los candidatos que aceptaron la convocatoria o la invitacion a la convocatoria
                     resolve(response.data);
@@ -175,7 +190,7 @@ return(
 
 </Card>
 <Card style={{width:'80%'}}>
-    <ListaCandidatos Candidatos={Candidatos} phase={phase} />   
+    <ListaCandidatos Candidatos={Candidatos} phase={phase} idrequerimiento={idr} />   
     <p>Debug: {message}</p>
 </Card>
 

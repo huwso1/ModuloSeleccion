@@ -5,6 +5,7 @@ import CardBody from 'react-bootstrap/esm/CardBody';
 import Card  from 'react-bootstrap/Card';
 import CardGroup from 'react-bootstrap/CardGroup';
 import Form from 'react-bootstrap/Form';
+import analistamap from '../AnalistaGeneral/Mapeos/analistamap';
 
 function CreacionRequerimiento(){
     const [listaAnalistaGeneral,SetlistaAnalistaGeneral]=useState([]);
@@ -24,7 +25,7 @@ function CreacionRequerimiento(){
      // que lo solicito y el analista general al que se le asignara el requerimiento.
      //Se debe hacer la insercion en proceso requerimiento para la fase 1 del requerimiento
      try {
-       const response = await axios.post("/banana", {
+       const response = await axios.post("http://localhost:3003/requerimientos/crear", {
 
            "salariomax": SalarioMax,
            "salariomin": SalarioMin,
@@ -34,6 +35,7 @@ function CreacionRequerimiento(){
            "codEmpleado":window.sessionStorage.getItem("idusuario"),
            "analistaG":codanalistag,
        }).then((response)=>{
+        useNavigate("http://localhost:3000/NavigateBar");
          SetMessage(response.data.respuesta);
        })
        
@@ -48,8 +50,11 @@ function CreacionRequerimiento(){
             // Esperamos la resolución de la promesa usando await
             const data = await peticion();
             // Una vez que la promesa se resuelve, actualizamos el estado con los datos recibidos
-            
-            SetlistaAnalistaGeneral(data);
+            var listaanalista=[];
+            data.map((analista)=>{
+                listaanalista.push(new analistamap(analista.id,analista.nombre,analista.apellido));
+            })
+            SetlistaAnalistaGeneral(listaanalista);
 
             console.log(data); // Aquí puedes ver los datos en la consola
         } catch (error) {
@@ -75,7 +80,7 @@ function CreacionRequerimiento(){
    var peticion = () => {
     return new Promise((resolve, reject) => {
         SetMessage("");
-        axios.post('/Analistas generales', {"idusuario":window.sessionStorage.getItem("idusuario") })
+        axios.get('http://localhost:3003/empleados/analistas-generales')
             .then((response) => {
                 // Resolvemos la promesa con los datos recibidos
                 resolve(response.data);
@@ -109,7 +114,7 @@ function CreacionRequerimiento(){
          <Form.Label>Analista General Designado para tomar el requerimiento</Form.Label>
          <Form.Control as='select' style={{marginBottom:"30px"}}   placeholder="Analista General"  onChange={(e)=>{Setcodanalista(e.target.value)}} >
             {listaAnalistaGeneral.map((analista)=>{
-                return <option value={analista.id}>{analista.nombre}</option>
+                return <option value={analista.id}>{analista.nombre+' '+analista.apellido} </option>
             })}
 
          </Form.Control>

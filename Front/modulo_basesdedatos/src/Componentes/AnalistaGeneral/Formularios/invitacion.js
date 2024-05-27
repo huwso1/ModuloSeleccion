@@ -21,7 +21,7 @@ function Invitacion({idRequerimiento,listacandidatos}){
             return;
         }
         try {
-          const response = await axios.post("/DetallesRequerimiento", {
+          const response = await axios.post("http://localhost:3003/requerimientos/fase4", {
    
               
               "listacandidatos":listacandidatos ,
@@ -30,7 +30,8 @@ function Invitacion({idRequerimiento,listacandidatos}){
               "invitacion":Convocatoria
               
           }).then((response)=>{
-            useNavigate("NavigateBarAG")
+            window.location.reload();
+
             SetMessage(response.data.respuesta);
           })
           

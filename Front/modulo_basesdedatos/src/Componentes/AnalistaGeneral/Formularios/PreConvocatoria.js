@@ -21,12 +21,12 @@ function PreConvocatoria({idRequerimiento}){
         //Esta peticion envia los datos del requerimiento, incluyendo el codigo del analista cliente
         // que lo solicito y el analista general al que se le asignara el requerimiento.
         //Recordar que al resolverse esta peticion tambien debe crearse un nuevo registro en proceso requerimiento, con la nueva fase en este caso seria la fase 3
-        if(descfuncion=="" ||Perfil==null||Disciplina==null){
+        if(descfuncion=="" ||Perfil==null){
             SetMessage("Debe llenar los campos antes de continuar");
             return;
         }
         try {
-          const response = await axios.post("/DetallesRequerimiento", {
+          const response = await axios.post("http://localhost:3003/requerimientos/fase2", {
    
               
               "descfuncion": descfuncion,
@@ -36,7 +36,7 @@ function PreConvocatoria({idRequerimiento}){
               "idRequerimiento":idRequerimiento
               
           }).then((response)=>{
-            useNavigate("NavigateBarAG")
+            window.location.reload();   
             SetMessage(response.data.respuesta);
           })
           
@@ -50,11 +50,19 @@ function PreConvocatoria({idRequerimiento}){
             try {
                 // Esperamos la resolución de la promesa usando await
                 const data = await peticion();
-                const data1 = await peticionDisciplinas();
                 // Una vez que la promesa se resuelve, actualizamos el estado con los datos recibidos
                 //Tal vez sea necesario crear una funcion para pasar los datos a objetos Requerimientomap
-                SetlistaPerfil(data);
-                setListaDisciplinas(data1);
+                var perfiles=[];
+                data.map((perfil)=>{
+                    
+                    const Perfil={
+                        id:perfil.id,
+                        desPerfil:perfil.perfil,
+                        disciplina:perfil.disciplina
+                    }
+                    perfiles.push(Perfil);
+                })
+                SetlistaPerfil(perfiles);
     
                 console.log(data); // Aquí puedes ver los datos en la consola
             } catch (error) {
@@ -82,8 +90,8 @@ function PreConvocatoria({idRequerimiento}){
        //Esta peticion actualizara la lista de requerimientos al cargar la pagina
        var peticion = () => {
         return new Promise((resolve, reject) => {
-            setMessage("");
-            Axios.post('/Perfiles', {"idusuario":window.sessionStorage.getItem("idusuario") })
+            SetMessage("");
+            axios.get('http://localhost:3003/perfiles', {})
                 .then((response) => {
                     // Resolvemos la promesa con los datos recibidos, es decir los requerimientos asignados a ese analista general, identificado por idusuario
                     resolve(response.data);
@@ -94,20 +102,7 @@ function PreConvocatoria({idRequerimiento}){
                 });
         });
     };
-    var peticionDisciplinas = () => {
-        return new Promise((resolve, reject) => {
-            setMessage("");
-            Axios.post('/Disciplinas', {"idusuario":window.sessionStorage.getItem("idusuario") })
-                .then((response) => {
-                    // Resolvemos la promesa con los datos recibidos, es decir los requerimientos asignados a ese analista general, identificado por idusuario
-                    resolve(response.data);
-                })
-                .catch((error) => {
-                    // Rechazamos la promesa con el mensaje de error
-                    SetMessage(error.response.data.errors);
-                });
-        });
-    };
+   
 
     
 
@@ -120,13 +115,7 @@ return(<div className="center-card" style={{paddingTop:"1rem",width:"40rem",padd
     <Form.Label>Elija el perfil requerido</Form.Label>
     <Form.Control as='select' style={{marginBottom:"30px"}} value={Perfil} onChange={(element)=>{SetPerfil(element.target.value)}} onClick={(element)=>{SetPerfil(element.target.value)}}>
         {listaPerfiles.map((perfil)=>{
-            return <option value={perfil.id}>{perfil.desPerfil}</option>
-        })}
-    </Form.Control>
-    <Form.Label>Elija la disciplina</Form.Label>
-    <Form.Control as='select' style={{marginBottom:"30px"}} value={Disciplina} onChange={(element)=>{SetDisciplina(element.target.value)}} onClick={(element)=>{SetDisciplina(element.target.value)}}>
-        {listaDisciplinas.map((Disciplina)=>{
-            return <option value={Disciplina.id}>{Disciplina.descDisciplina}</option>
+            return <option value={perfil.id}>{perfil.desPerfil+' '+perfil.disciplina}</option>
         })}
     </Form.Control>
     

@@ -18,7 +18,7 @@ useEffect(() => {
             const data = await peticion();
             // Una vez que la promesa se resuelve, actualizamos el estado con los datos recibidos
             //Tal vez sea necesario crear una funcion para pasar los datos a objetos Requerimientomap
-            setRequerimientos(data.hojadevida);
+            SetHojadevida(data);
 
             console.log(data); // Aquí puedes ver los datos en la consola
         } catch (error) {
@@ -34,11 +34,11 @@ useEffect(() => {
 
     fetchData();
 }, []);
-   //Esta peticion actualizara la lista de requerimientos al cargar la pagina
+   //Esta peticion actualizara la hoja de vida del candidato
    var peticion = () => {
     return new Promise((resolve, reject) => {
         SetMessage("");
-        axios.post('/Requerimientos', {"idusuario":window.sessionStorage.getItem("idusuario"),"usuariocandidato":usuario })
+        axios.get('http://localhost:3003/candidatos/hv/'+usuario, { })
             .then((response) => {
                 // Resolvemos la promesa con los datos recibidos, es decir los requerimientos asignados a ese analista general, identificado por idusuario
                 resolve(response.data);

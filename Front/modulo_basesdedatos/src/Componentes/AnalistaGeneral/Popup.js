@@ -20,10 +20,11 @@ function Popup({ codigo,fase,onClose,utilitary }) {
             return( <Hojadevida usuario={codigo} />)
         }
         if(fase==="invitacion"){
+          
             return( <Invitacion listacandidatos={codigo} idRequerimiento={utilitary}  />)
         }
-        if(fase===5){
-            return( <Asignaciondepruebas  idRequerimiento={utilitary}  />)
+        if(fase===5){ 
+            return( <Asignaciondepruebas  idRequerimiento={codigo}  />)
         }
     }
   return (

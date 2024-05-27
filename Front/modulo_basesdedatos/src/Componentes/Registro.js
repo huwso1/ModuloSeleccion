@@ -35,6 +35,8 @@ function Registro(){
        console.log(error);
      }
    };
+
+   
  
      
    

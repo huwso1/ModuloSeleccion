@@ -19,26 +19,26 @@ function Asignaciondepruebas({idRequerimiento}){
         //Esta peticion envia los datos del requerimiento, incluyendo el codigo del analista cliente
         // que lo solicito y el analista general al que se le asignara el requerimiento.
         //Recordar que al resolverse esta peticion tambien debe crearse un nuevo registro en proceso requerimiento, con la nueva fase en este caso seria la Fase 4
-        if(idprueba==null || idperfil==null){
+        if(idprueba==null ){
             SetMessage("Debe llenar los campos antes de continuar");
             return;
         }
         try {
-          const response = await axios.post("/ProgramarPrueba", {
+          const response = await axios.post("http://localhost:3003/requerimientos/fase6", {
    
               "idusuario":window.sessionStorage.getItem("idusuario"),
               "idRequerimiento":idRequerimiento,
-              "perfil":idperfil,
-              "prueba":idprueba,
-              "fecha":fecha
+              "idPrueba":idprueba,
+              "fechaPresentacion":fecha
               
           }).then((response)=>{
-            useNavigate("NavigateBarAG")
+            window.location.reload();
             SetMessage(response.data.respuesta);
           })
           
         } catch (error) {
           console.log(error);
+          
         }
       };
 
@@ -48,14 +48,25 @@ function Asignaciondepruebas({idRequerimiento}){
                 // Esperamos la resolución de la promesa usando await
                 
                 const data = await peticion();
-                setListapruebas(data.listapruebas);
-                setPerfil(data.perfil);
+                
+               var listap=[];
+               data.map((prueba)=>{
+
+                const test={
+                    id:prueba.idprueba,
+                    descPrueba:prueba.descprueba,
+                    tipoprueba:prueba.tipoprueba,
+                    disciplina:prueba.disciplina
+                }
+                listap.push(test);
+               })
+               setListapruebas(listap);
                 // Una vez que la promesa se resuelve, actualizamos el estado con los datos recibidos
                 //Tal vez sea necesario crear una funcion para pasar los datos a objetos Requerimientomap
                 
                 
     
-                console.log(data); // Aquí puedes ver los datos en la consola
+                console.log(listapruebas); // Aquí puedes ver los datos en la consola
             } catch (error) {
                 // Manejamos cualquier error que pueda ocurrir
                 //Se setea la lista con una lista ejemplo, la idea es que el back envie una lista json con objetos analista general
@@ -69,11 +80,11 @@ function Asignaciondepruebas({idRequerimiento}){
     
         fetchData();
     }, []);
-       //Esta peticion actualizara la lista de requerimientos al cargar la pagina
+       //Esta peticion actualizara la lista de pruebas al cargar la pagina
        var peticion = () => {
         return new Promise((resolve, reject) => {
             SetMessage("");
-            axios.post('/PerfilyPruebas', {"idusuario":window.sessionStorage.getItem("idusuario"),"idrequerimiento":idRequerimiento })
+            axios.get('http://localhost:3003/pruebas/requerimiento/'+idRequerimiento, {})
                 .then((response) => {
                     // Resolvemos la promesa con los datos recibidos, es decir los la lista de pruebas para el perfil del requerimiento, y el perfil del requerimiento
                     
@@ -81,13 +92,8 @@ function Asignaciondepruebas({idRequerimiento}){
                 })
                 .catch((error) => {
                     // Rechazamos la promesa con el mensaje de error
-                    const prueba={
-                        id:"ABC",
-                        descPrueba:"banana"
-                    }
-                    setListapruebas([prueba]);
-                    setPerfil("guachiman");
-                    SetMessage(error.response.data.errors);
+                    
+                    
                     reject(error);  
         });
                     
@@ -104,7 +110,7 @@ function Asignaciondepruebas({idRequerimiento}){
     <h3 style={{resize:"none",marginBottom:"30px", width:"30rem"}}>Las pruebas disponibles para el perfil {idperfil} son:</h3>
     <Form.Control  as='select' style={{resize:"none",marginBottom:"30px", width:"30rem"}} value={idprueba}   onChange={(e)=>{setPrueba(e.target.value)}}  onClick={(e)=>{setPrueba(e.target.value)}}  >
     {listapruebas.map((prueba)=>{
-        return <option value={prueba.id}>{prueba.descPrueba}</option>
+        return <option value={prueba.id}>{prueba.descPrueba+' tipo:'+prueba.tipoprueba+' disciplina: '+prueba.disciplina}</option>
     })}    
     </Form.Control>
     <Form.Control  as='input' type="date" style={{resize:"none",marginBottom:"30px", width:"30rem"}} value={fecha}   onChange={(e)=>{setfecha(e.target.value)}}   />
