@@ -9,24 +9,43 @@ export const getAllGeneralAnalyst = async (req, res) => {
   }
 };
 
-// export const getUserById = async (req, res) => {
-//   try {
-//     const user = await userService.getUserById(req.params.id);
-//     if (user) {
-//       res.json(user);
-//     } else {
-//       res.status(404).json({ error: 'User not found' });
-//     }
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+export const createEmployeeController = async (req, res) => {
+  try {
+    const employeeData = req.body;
+    const newEmployee = await employeeService.createEmployee(employeeData);
 
-// export const createUser = async (req, res) => {
-//   try {
-//     const user = await userService.createUser(req.body);
-//     res.status(201).json(user);
-//   } catch (err) {
-//     res.status(500).json({ error: err.message });
-//   }
-// };
+    // Enviar una respuesta exitosa con el nuevo ID de empleado
+    res.status(201).json(newEmployee);
+  } catch (error) {
+    // Manejar cualquier error que pueda ocurrir durante la creación del empleado
+    console.error('Error creando empleado:', error);
+    res.status(500).json({ error: 'Hubo un problema al crear el empleado' });
+  }
+};
+
+
+export const employeeLoginController = async (req, res) => {
+  try {
+    const { usuario, contraseña } = req.body;
+
+    // Verificar si todos los campos requeridos están presentes en el cuerpo de la solicitud
+    if (!usuario) {
+      return res.status(400).json({ error: 'Todos los campos son obligatorios' });
+    }
+
+    // Llamar a la función employeeLogin para verificar las credenciales del empleado
+    const employeeData = await employeeService.employeeLogin({ usuario, contraseña });
+
+    // Si no se encontró un empleado con el correo proporcionado, devolver un error 400
+    if (!employeeData) {
+      return res.status(400).json({ error: 'No se encontró un empleado con el correo proporcionado' });
+    }
+
+    // Enviar una respuesta exitosa con los datos del empleado
+    res.status(200).json(employeeData);
+  } catch (error) {
+    // Manejar cualquier error que pueda ocurrir durante el inicio de sesión
+    console.error('Error en el inicio de sesión del empleado:', error);
+    res.status(500).json({ error: 'Hubo un problema al iniciar sesión' });
+  }
+};
