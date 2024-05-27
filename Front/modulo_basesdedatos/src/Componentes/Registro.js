@@ -20,7 +20,7 @@ function Registro(){
      //Esta peticion envia los datos del candidato para que sea insertado en la base de datos
      // Tiene que insertar en empleado y cargoempleado
      try {
-       const response = await axios.post("/banana", {
+       const response = await axios.post("http://localhost:3003/empleados/crear", {
 
            "nomEmpleado": nombre,
            "apeEmpleado": apellido,
@@ -52,16 +52,14 @@ function Registro(){
          <Form.Label>Apellido</Form.Label>
          <Form.Control as='input' type="text" placeholder="Doe" value={apellido} onChange={(e)=>{Setapellido(e.target.value.trim())}} />
          <Form.Label>Cargo</Form.Label>
-         <Form.Control as='select'   value={ndoc} onChange={(e)=>{Setndoc(e.target.valueAsNumber)}} >
-            {cargos.map((cargo,index)=>{
-                return <option value={''+(index+1)}>{cargo}</option>
-            })}
-
+         <Form.Control as='select'   value={ndoc} onChange={(e)=>{Setndoc(e.target.value)}} >
+            <option value={1}>Analista cliente</option>
+            <option value={2}>Analista General</option>
          </Form.Control>
      </Form.Group>
    <Form.Group className="mb-5" controlId="exampleForm.ControlDate">
      <Form.Label>Fecha de nacimiento</Form.Label>
-     <Form.Control type="date"  value={fechaNac} onChange={(e)=>{SetFecha(e.target.value)}}/>
+     <Form.Control type="date"  value={fechaNac} onClick={(e)=>{SetFecha(e.target.value)}} onChange={(e)=>{SetFecha(e.target.value)}}/>
      
      <button type="button" className="btn btn-primary" onClick={handleSubmit}>Crear Empleado</button>
    </Form.Group>
