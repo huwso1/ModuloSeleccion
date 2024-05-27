@@ -19,6 +19,9 @@ function Popup({ codigo,fase,onClose,utilitary }) {
         if(fase==3){
             return( <Hojadevida usuario={codigo} />)
         }
+        if(fase==4){
+          return( <Hojadevida usuario={codigo} />)
+      }
         if(fase==="invitacion"){
           
             return( <Invitacion listacandidatos={codigo} idRequerimiento={utilitary}  />)

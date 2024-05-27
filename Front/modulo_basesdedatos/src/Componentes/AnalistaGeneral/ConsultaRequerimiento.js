@@ -90,7 +90,7 @@ useEffect(() => {
             var listareq=[];
             data.map((requerimiento)=>{
                 listareq.push(new Requerimientomap(requerimiento.CONSECREQUE,requerimiento.CODEMPLEADO1,requerimiento.FECHAREQUE,
-                    null,requerimiento.FASE
+                    null,requerimiento.FASE,'FUNCION: '+requerimiento.DESFUNCION+' Carrera: '+requerimiento.DESCARRERAS,requerimiento.NVACANTES
                 ))
             })
             setRequerimientos(listareq);

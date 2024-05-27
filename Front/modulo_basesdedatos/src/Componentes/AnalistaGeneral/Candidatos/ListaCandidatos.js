@@ -100,7 +100,7 @@ function ListaCandidatos({Candidatos,phase,idrequerimiento}){
               
               
           }).then((response)=>{
-            useNavigate("NavigateBarAG")
+            
             window.location.reload();
             Setdebug(response.data.respuesta);
           }).catch((error)=>{
