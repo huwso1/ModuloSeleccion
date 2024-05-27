@@ -84,7 +84,62 @@ async function getCandidatesFifthPhase(idRequerimiento) {
   }
 }
 
+async function getCandidatesPassedTest(requerimientoId) {
+  let connection;
+  try {
+    connection = await oracledb.getConnection();
+
+    const query = `
+      SELECT c.*
+      FROM Candidato c
+      JOIN ProcesoCandidato pc ON c.usuario = pc.usuario
+      JOIN PruebaCandidato prc ON pc.usuario = prc.usuario AND pc.consecReque = prc.consecReque AND pc.idFase = prc.idFase AND pc.consProceso = prc.consProceso
+      JOIN (
+        SELECT ResCan.consePruebaCandi, 
+               COUNT(CASE WHEN ResCan.resCandi = Res.respuesta THEN 1 END) AS correctas,
+               (SELECT COUNT(respuesta) FROM Respuesta WHERE idPrueba = ResCan.idPrueba) AS total
+        FROM RespuestaCandidato ResCan
+        JOIN PreguntaCandidato PreCan ON ResCan.idPrueba = PreCan.idPrueba AND ResCan.consePregunta = PreCan.consePregunta AND ResCan.consePruebaCandi = PreCan.consePruebaCandi
+        JOIN Pregunta Pre ON Pre.idPrueba = PreCan.idPrueba AND Pre.consePregunta = PreCan.consePregunta
+        JOIN Respuesta Res ON Res.idPrueba = Pre.idPrueba AND Res.consePregunta = Pre.consePregunta
+        GROUP BY ResCan.consePruebaCandi, ResCan.idPrueba
+      ) conteo_respuestas ON prc.consePruebaCandi = conteo_respuestas.consePruebaCandi
+      WHERE (correctas / total) >= 0.4
+      AND pc.consProceso = 6 AND pc.consecReque = :requerimientoId
+    `;
+
+    const result = await connection.execute(query, { requerimientoId });
+
+    // Obtener los metadatos y las filas del resultado
+    const rows = result.rows;
+    const meta = result.metaData;
+
+    // Convertir los resultados a un array de objetos con los nombres de los atributos
+    const candidates = rows.map(row => {
+      let candidate = {};
+      meta.forEach((col, index) => {
+        candidate[col.name.toLowerCase()] = row[index];
+      });
+      return candidate;
+    });
+
+    return candidates;
+  } catch (error) {
+    console.error('Error obteniendo candidatos que pasaron la prueba:', error);
+    throw error;
+  } finally {
+    if (connection) {
+      try {
+        await connection.close();
+      } catch (error) {
+        console.error('Error cerrando la conexión:', error);
+      }
+    }
+  }
+}
+
 export {
   getAllCandidatesByDiscipline,
   getCandidatesFifthPhase,
+  getCandidatesPassedTest,
 };

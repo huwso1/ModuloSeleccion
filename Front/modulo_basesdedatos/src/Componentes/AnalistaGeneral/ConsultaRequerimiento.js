@@ -61,8 +61,12 @@ const handlerFase4=(idrequerimiento,fase)=>{
     if(fase==6){
         fetchCandidatos=async()=>{
             try{
-                const data=await peticionCandidatosquetienen40enpruebas();
-                setCandidatos(data);
+                const data=await peticionCandidatosquetienen40enpruebas(idrequerimiento);
+                var  listacandidatos=[];
+                data.map((candidato)=>{
+                    listacandidatos.push(new Candidato(candidato.usuario,candidato.nombre,candidato.apellido,candidato.fechanac,candidato.ndoc,candidato.idtipodoc));
+                })
+                setCandidatos(listacandidatos);
                 setSelect(true);
             }catch(error){
                 setSelect(true);
@@ -163,14 +167,13 @@ useEffect(() => {
                 });
         });
     };
-    var peticionCandidatosquetienen40enpruebas= () => {
+    var peticionCandidatosquetienen40enpruebas= (idrequerimiento) => {
         return new Promise((resolve, reject) => {
             
-            Axios.post('/Candidatosqueaceptaron', {"idusuario":window.sessionStorage.getItem("idusuario"),"idRequerimiento":idr})
+            Axios.get('http://localhost:3003/candidatos/prueba-aprobada/'+idrequerimiento, {})
                 .then((response) => {
-                    // Resolvemos la promesa con los datos recibidos, es decir los candidatos que sacaron mas de 40% en las pruebas asignadas para el perfil
+                    // Resolvemos la promesa con los datos recibidos, es decir los candidatos con la disciplina que pide el requerimiento
                     resolve(response.data);
-                    
                 })
                 .catch((error) => {
                     // Rechazamos la promesa con el mensaje de error
