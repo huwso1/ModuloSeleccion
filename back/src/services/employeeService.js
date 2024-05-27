@@ -104,7 +104,8 @@ async function employeeLogin({ usuario, contraseña }) {
 
     // Consultar la información del empleado
     const query = `
-      SELECT E.codEmpleado AS id , E.NOMEMPLEADO AS nombre, E.APELLEMPLEADO AS apellido, TC.idTipoCargo AS idTipoCargo, TC.descTipoCargo AS tipocargo
+      SELECT E.codEmpleado AS id, E.nomEmpleado AS nombre, E.apellEmpleado AS apellido,
+             E.fechaIngre AS fechaIngreso, TC.idTipoCargo AS idTipoCargo, TC.descTipoCargo AS tipoCargo
       FROM Empleado E
       JOIN Cargo C ON E.codEmpleado = C.codEmpleado
       JOIN TipoCargo TC ON C.idTipoCargo = TC.idTipoCargo
