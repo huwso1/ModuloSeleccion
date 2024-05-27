@@ -10,9 +10,10 @@ function Login() {
     const navigate = useNavigate();
 
     function peticion(){
-        axios.post("/login",{"usuario":usuario,"contraseña":contraseña}).then((response)=>{
-            window.sessionStorage.setItem("idusuario",response.data.idusuario);
-            window.sessionStorage.setItem("Datos",response.data.datosusuario);
+        axios.post("http://localhost:3003/empleados/iniciar-sesion",{"usuario":usuario}).then((response)=>{
+            
+            window.sessionStorage.setItem("idusuario",response.data.id);
+            window.sessionStorage.setItem("Datos",response.data.dato);
             window.sessionStorage.setItem("rol",response.data.idtipocargo);
             if(response.data.idtipocargo=='1'){
                 navigate('/NavigateBar');
@@ -21,10 +22,8 @@ function Login() {
                 navigate('/NavigateBarAG');
             }
         }).catch((response)=>{
-            window.sessionStorage.setItem("idusuario","00004");
-            window.sessionStorage.setItem("Datos","Juan Alberto Parra");
-            window.sessionStorage.setItem("rol","2");
-            navigate('/NavigateBarAG');
+          
+            
             setMessage("Usuario o contraseña incorrectos");
         }
         )
