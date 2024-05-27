@@ -55,19 +55,20 @@ async function getRequirementsByGeneralAnalystId(analystId) {
     connection = await oracledb.getConnection();
 
     const query = `
-      SELECT R.*, 
-             CASE 
-               WHEN (SELECT COUNT(PR.consproceso)
-                     FROM ProcesoRequerimiento PR
-                     WHERE R.consecReque = PR.consecReque) = 0
-               THEN 1
-               ELSE (SELECT COUNT(PR.consproceso)
-                     FROM ProcesoRequerimiento PR
-                     WHERE R.consecReque = PR.consecReque)
-             END AS fase
-      FROM Requerimiento R
-      JOIN Empleado E ON R.codEmpleado2 = E.codEmpleado
-      WHERE E.codEmpleado = :analystId
+    SELECT R.*, Res.nomEmpleado||' '||Res.apellEmpleado responsable,
+        CASE 
+          WHEN (SELECT COUNT(PR.consproceso)
+                FROM ProcesoRequerimiento PR
+                WHERE R.consecReque = PR.consecReque) = 0
+          THEN 1
+          ELSE (SELECT COUNT(PR.consproceso)
+                FROM ProcesoRequerimiento PR
+                WHERE R.consecReque = PR.consecReque)
+        END AS fase
+    FROM Requerimiento R
+    JOIN Empleado E ON R.codEmpleado2 = E.codEmpleado
+    JOIN Empleado Res ON Res.codEmpleado = E.codEmpleado
+    WHERE E.codEmpleado = :analystId
     `;
 
     const result = await connection.execute(query, { analystId }, { outFormat: oracledb.OUT_FORMAT_OBJECT });
