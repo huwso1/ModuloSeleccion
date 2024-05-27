@@ -55,9 +55,9 @@ async function getRequirementsByGeneralAnalystId(analystId) {
     connection = await oracledb.getConnection();
 
     const query = `
-    SELECT R.*, Res.nomEmpleado||' '||Res.apellEmpleado responsable,
+    SELECT R.*, Res.nomEmpleado||' '||Res.apellEmpleado responsable ,
         CASE 
-          WHEN (SELECT COUNT(PR.consproceso)
+          WHEN (SELECT COUNT(PR.consproceso)    
                 FROM ProcesoRequerimiento PR
                 WHERE R.consecReque = PR.consecReque) = 0
           THEN 1
@@ -66,9 +66,9 @@ async function getRequirementsByGeneralAnalystId(analystId) {
                 WHERE R.consecReque = PR.consecReque)
         END AS fase
     FROM Requerimiento R
-    JOIN Empleado E ON R.codEmpleado2 = E.codEmpleado
-    JOIN Empleado Res ON Res.codEmpleado = E.codEmpleado
-    WHERE E.codEmpleado = :analystId
+    JOIN Empleado E ON R.codEmpleado1 = E.codEmpleado
+    JOIN Empleado Res ON Res.codEmpleado = E.codEmpleado 
+    where R.codEmpleado2= :analystId
     `;
 
     const result = await connection.execute(query, { analystId }, { outFormat: oracledb.OUT_FORMAT_OBJECT });

@@ -89,7 +89,7 @@ useEffect(() => {
             //Tal vez sea necesario crear una funcion para pasar los datos a objetos Requerimientomap
             var listareq=[];
             data.map((requerimiento)=>{
-                listareq.push(new Requerimientomap(requerimiento.CONSECREQUE,requerimiento.CODEMPLEADO1,requerimiento.FECHAREQUE,
+                listareq.push(new Requerimientomap(requerimiento.CONSECREQUE,requerimiento.RESPONSABLE,requerimiento.FECHAREQUE,
                     null,requerimiento.FASE,'FUNCION: '+requerimiento.DESFUNCION+' Carrera: '+requerimiento.DESCARRERAS,requerimiento.NVACANTES
                 ))
             })
@@ -100,7 +100,7 @@ useEffect(() => {
             // Manejamos cualquier error que pueda ocurrir
             //Se setea la lista con una lista ejemplo, la idea es que el back envie una lista json con objetos analista general
             // que tendran como atributos, nombre y id
-            
+                
             
             console.error('Error al obtener los datos:', error);
         }
