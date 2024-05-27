@@ -30,7 +30,17 @@ return(
         </Card>
         <Card>
             <CardBody>
-            <p>{Requerimiento.fechai}</p>
+            <p>{Requerimiento.descripcion}</p>
+            </CardBody>
+        </Card>
+        <Card>
+            <CardBody>
+            <p>{Requerimiento.vacantes}</p>
+            </CardBody>
+        </Card>
+        <Card>
+            <CardBody>
+            <p>{Requerimiento.fechai.substring(0,10)}</p>
             <p>{Requerimiento.fechaF}</p>
             </CardBody>
         </Card>

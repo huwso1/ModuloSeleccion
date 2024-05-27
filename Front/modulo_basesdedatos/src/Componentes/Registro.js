@@ -28,6 +28,7 @@ function Registro(){
            "correo": usuario,
            "idtipocargo":ndoc
        }).then((response)=>{
+        useNavigate("http://localhost:3000/");
          SetMessage(response.data.respuesta);
        })
        

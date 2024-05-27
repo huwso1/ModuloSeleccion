@@ -50,7 +50,17 @@ function ListaRequerimientos({Requerimientos,handler}){
             </Card>
             <Card style={{backgroundColor:'#129EF2',alignItems:'center'}}>
                 <CardBody >
-                    <p>Nombre del Analista Responsable</p>
+                    <p>Codigo Analista Responsable</p>
+                </CardBody>
+            </Card>
+            <Card style={{backgroundColor:'#129EF2',alignItems:'center'}}>
+                <CardBody >
+                    <p>Descripcion</p>
+                </CardBody>
+            </Card>
+            <Card style={{backgroundColor:'#129EF2',alignItems:'center'}}>
+                <CardBody >
+                    <p>Numero de vacantes</p>
                 </CardBody>
             </Card>
             <Card style={{backgroundColor:'#129EF2',alignItems:'center'}}>
